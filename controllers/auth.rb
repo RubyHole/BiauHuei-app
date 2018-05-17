@@ -24,7 +24,7 @@ module BiauHuei
           flash[:notice] = "Welcome back #{account['username']}!"
           routing.redirect '/'
         rescue StandardError
-          flash[:error] = 'Username and password did not match our records'
+          flash[:error] = 'Username or password did not match our records'
           routing.redirect @login_route
         end
       end
@@ -32,6 +32,7 @@ module BiauHuei
       routing.on 'logout' do
         routing.get do
           session[:current_account] = nil
+          flash[:notice] = 'You are logged out!'
           routing.redirect @login_route
         end
       end

@@ -4,3 +4,6 @@
 - if flash[:notice]
   div class="alert alert-success"  id="flash_bar_success"
     = flash[:notice]
+- if flash[:warning]
+  div class="alert alert-warning"  id="flash_bar_warning"
+    = flash[:warning]
