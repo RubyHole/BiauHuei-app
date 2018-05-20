@@ -15,12 +15,16 @@ gem 'rake'
 
 # Diagnostic
 gem 'pry'
+gem 'rack-test'
 
 # Security
 gem 'rack-ssl-enforcer'
+gem 'rbnacl-libsodium'
 
 # Communication
 gem 'http'
+gem 'redis'
+gem 'redis-rack'
 
 group :test do
   gem 'minitest'

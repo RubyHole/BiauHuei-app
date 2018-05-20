@@ -7,7 +7,6 @@ module BiauHuei
   class App < Roda
     route('auth') do |routing|
       @login_route = '/auth/login'
-      
       routing.is 'login' do
         # GET /auth/login
         routing.get do
@@ -17,10 +16,10 @@ module BiauHuei
         # POST /auth/login
         routing.post do
           account = AuthenticateAccount.new(App.config).call(
-            username: routing.params['username'],
-            password: routing.params['password'])
+            JsonRequestBody.symbolize(routing.params)
+          )
         
-          session[:current_account] = account
+          SecureSession.new(session).set(:current_account, account)
           flash[:notice] = "Welcome back #{account['username']}!"
           routing.redirect '/'
         rescue StandardError
@@ -29,11 +28,31 @@ module BiauHuei
         end
       end
 
-      routing.on 'logout' do
+      routing.is 'logout' do
         routing.get do
-          session[:current_account] = nil
+          SecureSession.new(session).delete(:current_account)
           flash[:notice] = 'You are logged out!'
           routing.redirect @login_route
+        end
+      end
+      
+      @register_route = '/auth/register'
+      routing.is 'register' do
+        routing.get do
+          view :register
+        end
+
+        routing.post do
+          account_data = JsonRequestBody.symbolize(routing.params)
+          CreateAccount.new(App.config).call(account_data)
+
+          flash[:notice] = 'Please login with your new account information'
+          routing.redirect '/auth/login'
+        rescue StandardError => error
+          puts "ERROR CREATING ACCOUNT: #{error.inspect}"
+          puts error.backtrace
+          flash[:error] = 'Could not create account'
+          routing.redirect @register_route
         end
       end
     end
