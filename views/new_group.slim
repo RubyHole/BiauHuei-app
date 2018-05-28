@@ -1,0 +1,71 @@
+h3 class="text-center mb-4" New Group
+form class="text-center" id="form-new-group" style="margin-bottom:250px"
+  
+  div class="form-group form-row"
+    label for="inputTitle" Title
+    input type="text" class="form-control" id="inputTitle" placeholder="Title"
+    
+  div class="form-group form-row"
+    label for="Description" Description
+    textarea class="form-control" id="Description" rows="3" placeholder="Description"
+  
+  div class="form-group form-row mb-2"
+    label class="mb-0" for="RoundInterval" Round Interval
+  div class="form-group form-row"
+    div class="col col-sm-4"
+      input type="text" class="form-control" id="staticEmail2" value="1"
+    div class="col col-sm-2"
+      input type="text" readonly="" class="form-control-plaintext" id="staticEmail2" value="Months &"
+    div class="col col-sm-4"
+      input type="text" class="form-control" id="staticEmail2" value="0"
+    div class="col col-sm-2"
+      input type="text" readonly="" class="form-control-plaintext" id="staticEmail2" value="Days"
+  
+  
+  div class="form-group form-row mb-2"
+    label class="mb-0" for="BiddingDuration" Bidding Duration
+  div class="form-group form-row"
+    div class="col col-sm-4"
+      input type="text" class="form-control" id="staticEmail2" value="1"
+    div class="col col-sm-2"
+      input type="text" readonly="" class="form-control-plaintext" id="staticEmail2" value="Months &"
+    div class="col col-sm-4"
+      input type="text" class="form-control" id="staticEmail2" value="0"
+    div class="col col-sm-2"
+      input type="text" readonly="" class="form-control-plaintext" id="staticEmail2" value="Days"
+  
+  div class="form-group form-row mb-2"
+    label class="mb-0" for="RoundFee" Round Fee
+  div class="form-group form-row"
+    div class="col col-sm-10"
+      input type="text" class="form-control" id="staticEmail2" value="100"
+    div class="col col-sm-2"
+      input type="text" readonly="" class="form-control-plaintext" id="staticEmail2" value="NTD"
+  
+  div class="form-group form-row mb-2"
+    label class="mb-0" for="BiddingUpsetPrice" Bidding Upset Price
+  div class="form-group form-row"
+    div class="col col-sm-10"
+      input type="text" class="form-control" id="staticEmail2" value="100"
+    div class="col col-sm-2"
+      input type="text" readonly="" class="form-control-plaintext" id="staticEmail2" value="NTD"
+  
+  div class="form-group form-row mb-2"
+    label class="mb-0" for="RoundInterval" Members
+
+  div class="form-group form-row mb-2" action=""
+    div class="input-group control-group after-add-more"
+      input type="text" name="addmore[]" class="form-control active-input" placeholder="Enter Username Here"
+      div class="input-group-btn"
+      button class="btn btn-success add-more" type="button"
+        i class="glyphicon glyphicon-plus" Add
+    div class="text-danger invisible validate-add-more" The username is not existed.
+  
+  button type="submit" class="btn btn-primary align-items-center mt-5" Submit
+        
+div class="copy-fields d-none"
+  div class="control-group input-group mb-2"
+    input type="text" name="addmore[]" class="form-control" placeholder="Enter Username Here" readonly=""
+    div class="input-group-btn"
+    button class="btn btn-danger remove" type="button"
+      i class="glyphicon glyphicon-remove" Remove

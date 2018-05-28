@@ -1,0 +1,89 @@
+div class="container border shadow pt-2 mb-3 #{visibility}" id="round_#{round['round_id']}"
+  div class="row"
+    div class="col-sm"
+      h5 class="float-left"
+        | Round ID:
+        span class="text-primary font-weight-bold pl-3"
+          | #{round['round_id']}
+      div class="dropdown float-right"
+        button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+          | Select Round
+        div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
+          - rounds.each do |round_dropdown|
+            div class="dropdown-item" self-round-id="#{round['round_id']}" target-round-id="#{round_dropdown['round_id']}"
+              | Round #{round_dropdown['round_id']}
+          
+  
+  div class="row"
+    div class="col-sm"
+      table class="table table-sm"
+        tbody
+          - [['Total Saving:', round['total_saving']],
+             ['Start Date:', round['start_date']],
+             ['End Date:', round['end_date']],
+             ['Bidding End Date', round['bidding_end_date']],
+             ['Number of Bids:', round['number_of_bids']],
+            ].each do |thead, tbody|
+            tr
+              th #{thead}
+              td #{tbody}
+      
+      div class="card mb-4"
+        h5 class="card-header" style="background-color: #FDF5E6;"
+          | Winner
+        div class="card-body"
+          - if round['winner'].nil?
+            div class="row"
+              div class="col-sm font-weight-light font-italic text-secondary"
+                | This round is proceeding now.
+          - else
+            - [['Username:', round['winner']['username']],
+               ['Bid Price:', round['winner']['bid_price']],
+              ].each do |header, content|
+              div class="row"
+                div class="col-sm-4 font-weight-bold"
+                  | #{header}
+                div class="col-sm-8"
+                  | #{content}
+              
+      div class="card mb-4"
+        h5 class="card-header" style="background-color: #eafeea;"
+          | Yours
+        div class="card-body"
+          - [['Round Fee:', round['user']['round_fee']],
+            ].each do |header, content|
+            div class="row"
+              div class="col-sm-4 font-weight-bold"
+                | #{header}
+              div class="col-sm-8"
+                | #{content}
+            div class="row"
+              div class="col-sm font-weight-bold"
+                div class="clearfix"
+                  button type="button" class="btn btn-warning btn-sm float-right" data-toggle="modal" data-target="#bidHistoriesModal_#{round['round_id']}"
+                    | Histories
+                  | Latest Bid:
+                div class="card"
+                  div class="card-body"
+                    - if round['user']['latest_bid'].nil?
+                      div class="font-weight-light font-italic text-secondary"
+                        | You did not submit a bid.
+                    - else
+                      div class="font-weight-light"
+                        | Bid Price:
+                        span class="font-weight-normal pl-3"
+                          | #{round['user']['latest_bid']['bid_price']}
+                      div class="font-weight-light"
+                        | Created At:
+                        span class="font-weight-normal pl-3"
+                          | #{round['user']['latest_bid']['created_at']}
+                - if round['user']['is_allowed_to_bid']
+                  form class="form-inline float-right" id="form-bid"
+                    div class="form-group"
+                      label for="#{round['round_id']}" class="sr-only"
+                        | New Bid
+                      input type="password" class="form-control" id="inputPassword2" placeholder="#{bidding_upset_price}"
+                      button type="submit" class="btn btn-success"
+                        | New Bid
+
+== render :bid_histories, locals: { round: round }

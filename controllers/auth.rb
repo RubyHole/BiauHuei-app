@@ -15,22 +15,28 @@ module BiauHuei
 
         # POST /auth/login
         routing.post do
-          account = AuthenticateAccount.new(App.config).call(
+          authenticated = AuthenticateAccount.new(App.config).call(
             JsonRequestBody.symbolize(routing.params)
           )
-        
-          SecureSession.new(session).set(:current_account, account)
-          flash[:notice] = "Welcome back #{account['username']}!"
+          
+          current_user = User.new(authenticated['account'],
+                                  authenticated['auth_token'])
+          
+          Session.new(SecureSession.new(session)).set_user(current_user)
+          flash[:notice] = "Welcome back #{current_user.username}!"
           routing.redirect '/'
-        rescue StandardError
+        rescue StandardError => error
+          puts "ERROR: #{error.inspect}"
+          puts error.backtrace
           flash[:error] = 'Username or password did not match our records'
           routing.redirect @login_route
         end
       end
 
       routing.is 'logout' do
+        # GET /auth/logout
         routing.get do
-          SecureSession.new(session).delete(:current_account)
+          Session.new(SecureSession.new(session)).delete
           flash[:notice] = 'You are logged out!'
           routing.redirect @login_route
         end
@@ -38,21 +44,34 @@ module BiauHuei
       
       @register_route = '/auth/register'
       routing.is 'register' do
+        # GET /auth/register
         routing.get do
           view :register
         end
-
+        
+        # POST /auth/register
         routing.post do
           account_data = JsonRequestBody.symbolize(routing.params)
-          CreateAccount.new(App.config).call(account_data)
+          VerifyRegistration.new(App.config).call(account_data)
 
-          flash[:notice] = 'Please login with your new account information'
-          routing.redirect '/auth/login'
+          flash[:notice] = 'Please check your email for a verification link'
+          routing.redirect '/'
         rescue StandardError => error
           puts "ERROR CREATING ACCOUNT: #{error.inspect}"
           puts error.backtrace
-          flash[:error] = 'Could not create account'
+          flash[:error] = 'Account details are not valid: please check username and email'
           routing.redirect @register_route
+        end
+      end
+      
+      routing.on 'register' do
+        # GET /auth/register/[registration_token]
+        routing.get(String) do |registration_token|
+          flash.now[:notice] = 'Email Verified! Please choose a new password'
+          new_account = SecureMessage.decrypt(registration_token)
+          view :register_confirm,
+               locals: { new_account: new_account,
+                         registration_token: registration_token }
         end
       end
     end

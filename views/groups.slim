@@ -1,0 +1,28 @@
+- [['Leaded Groups', groups['leaded_groups']],
+   ['Participated Groups', groups['participated_groups']],
+  ].each do |header, groups|
+  div class="row" style="vertical-align: bottom;"
+    div class="col-xs-9"
+      h3 #{header}
+    div class="col-xs-3"
+  table class="table mb-5"
+    thead
+      tr
+        th Title
+        th Leader
+        th Start Date
+        th Round
+        th Status
+    tbody
+      - groups.each do |group|
+        tr
+          td
+            a href="/groups/#{group['id']}" #{group['title']}
+          td
+            div #{group['leader']}
+          td
+            div #{group['created_at']}
+          td
+            div #{group['round']}
+          td
+            div #{group['status']}

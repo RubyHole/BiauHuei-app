@@ -12,7 +12,7 @@ module BiauHuei
     end
 
     def call(username:, password:)
-      response = HTTP.post("#{@config.API_URL}/account/authenticate",
+      response = HTTP.post("#{@config.API_URL}/accounts/authenticate",
                            json: { username: username, password: password })
 
       raise(UnauthorizedError) unless response.code == 200

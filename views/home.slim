@@ -4,6 +4,6 @@ p This site allows you to securely store and retrieve the bids information for p
 p
   i Please avoid sharing production configuration at this point.
 
-- unless current_account
+- if current_user.logged_out?
   p 
     a href='/auth/login' login to start!

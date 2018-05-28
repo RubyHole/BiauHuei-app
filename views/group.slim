@@ -1,0 +1,45 @@
+div class="card shadow mb-3 mt-3"
+  div class="card-header clearfix" style="background-color: #87CEFA;"
+    h5 class="m-1 float-left" Group Information:
+    button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#memebersModal"
+      | Members
+  div class="card-body"
+    table class="table table-sm"
+      tbody
+        - [['Title:', group['title']],
+           ['Description:', group['description']],
+          ].each do |thead, tbody|
+          tr
+            th #{thead}
+            td #{tbody}
+        
+        tr
+          th Leader:
+          td 
+            | #{group['leader']['username']} (
+            a href="mailto:#{group['leader']['email']}"
+              | #{group['leader']['email']}
+            | )
+         
+        - [['Start Date:', group['start_datetime']],
+           ['Round:', group['current_round_id']],
+           ['Round Fee:', group['round_base_fee']],
+           ['Round Interval:', group['round_interval']],
+           ['Bidding Upset Price:', group['bidding_upset_price']],
+           ['Bidding Duration:', group['bidding_duration']],
+          ].each do |thead, tbody|
+          tr
+            th #{thead}
+            td #{tbody}
+    
+    - group['rounds'][0...-1].each do |round|
+      == render :round, locals: { rounds: group['rounds'],
+                                  round: round,
+                                  bidding_upset_price: group['bidding_upset_price'],
+                                  visibility: 'd-none' }
+    == render :round, locals: { rounds: group['rounds'],
+                                round: group['rounds'][-1],
+                                bidding_upset_price: group['bidding_upset_price'],
+                                visibility: 'd-block' }
+
+== render :members, locals: { group: group }

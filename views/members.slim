@@ -1,0 +1,26 @@
+div class="modal fade" id="memebersModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"
+  div class="modal-dialog modal-dialog-centered" role="document"
+    div class="modal-content"
+      div class="modal-header"
+        h5 class="modal-title" id="exampleModalCenterTitle"
+          | Members
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true"
+            | &times;
+      div class="modal-body"
+        table class="table"
+          thead
+            tr
+              th Username
+              th Email
+          tbody
+            - group['members'].each do |member|
+              tr
+                td
+                  | #{member['username']}
+                td
+                  a href="mailto:#{member['email']}" #{member['email']}
+
+      div class="modal-footer"
+        button type="button" class="btn btn-primary btn-sm" data-dismiss="modal"
+          | Close
