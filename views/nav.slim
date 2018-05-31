@@ -18,9 +18,13 @@ nav role="navigation" class="navbar navbar-dark navbar-expand-sm bg-primary mb-3
             = "#{@current_user.username}"
           ul class="dropdown-menu"
             li
-              a class="dropdown-item" href="/account/#{@current_user.username}" account
+              a class="dropdown-item" href="/account/#{@current_user.username}"
+                i class="fas fa-user"
+                | &nbspaccount
             li
-              a class="dropdown-item" href='/auth/logout' logout
+              a class="dropdown-item" href='/auth/logout'
+                i class="fas fa-sing-out-alt"
+                | &nbsplogout
       - else
         li class="nav-item"
           a class="nav-link" href='/auth/login' login
