@@ -20,14 +20,14 @@ nav role="navigation" class="navbar navbar-dark navbar-expand-sm bg-primary mb-3
             li
               a class="dropdown-item" href="/account/#{@current_user.username}"
                 i class="fas fa-user"
-                | &nbspaccount
+                | &nbspAccount
             li
               a class="dropdown-item" href='/auth/logout'
                 i class="fas fa-sign-out-alt"
-                | &nbsplogout
+                | &nbspLogout
       - else
         li class="nav-item"
-          a class="nav-link" href='/auth/login' login
+          a class="nav-link" href='/auth/login' Login
         li class="nav-item"
-          a class="nav-link" href='/auth/register' register
+          a class="nav-link" href='/auth/register' Register
 

@@ -8,12 +8,12 @@ div class="row"
         form method='post' action='/auth/login' id='form-login'
           div class="form-group"
             label for='input-username' Username
-            input type='text' name='username' id='input-username' class="form-control"
+            input type='text' name='username' id='input-username' class="form-control" required=""
           div class="form-group"
             label for='input-password' Password
-            input type='password' name='password' id='input-password' class="form-control"
+            input type='password' name='password' id='input-password' class="form-control" required=""
       
           button type='submit' id='button-login' value='login' class="btn btn-primary btn-block"
             i class="fas fa-sign-in-alt"
-            | &nbsplogin
+            | &nbspLogin
   div class="col-sm-4"
