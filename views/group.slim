@@ -39,6 +39,7 @@ div class="card shadow mb-3 mt-3"
                                   visibility: 'd-none' }
     == render :round, locals: { rounds: group['rounds'],
                                 round: group['rounds'][-1],
+                                group_id: group['group_id'],
                                 bidding_upset_price: group['bidding_upset_price'],
                                 visibility: 'd-block' }
 

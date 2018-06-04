@@ -1,8 +1,11 @@
 h1 Welcome to BiauHuei !
 p This site allows you to securely store and retrieve the bids information for private ROSCAs played traditionally by Taiwanese.
   
-p
-  i class='text-danger' Please avoid sharing production configuration at this point.
+- if current_user.logged_in?
+  p
+    a href='/groups' class='btn btn-primary' 
+      i class='fas fa-angle-double-right'
+      | Start!
 
 - if current_user.logged_out?
   p 

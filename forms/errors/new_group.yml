@@ -1,0 +1,17 @@
+en:
+  errors:
+    title: 'Title is required'
+    description: 'Description is required'
+    round_interval_days: 'round_interval_days is required'
+    round_interval_hours: 'round_interval_hours is required'
+    round_interval_minutes: 'round_interval_minutes is required'
+    round_interval_seconds: 'round_interval_seconds is required'
+    bidding_duration_days: 'bidding_duration_days is required'
+    bidding_duration_hours: 'bidding_duration_hours is required'
+    bidding_duration_minutes: 'bidding_duration_minutes is required'
+    bidding_duration_seconds: 'bidding_duration_seconds is required'
+    round_fee: 'Round fee is required'
+    bidding_upset_price: 'Bidding upset price is required'
+    members: "Members' usernames should not be blank"
+    rational_round_fee: 'Round fee should larger than 0'
+    rational_bidding_upset_price: 'Bidding upset price should larger than 0'

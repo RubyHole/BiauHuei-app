@@ -1,0 +1,4 @@
+en:
+  errors:
+    bid_price: 'should not be blank'
+    rational_bid_price: '=> Entered "bid price" should be more than "bidding upset price"'

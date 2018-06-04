@@ -65,7 +65,10 @@ div class="container border shadow pt-2 mb-3 #{visibility}" id="round_#{round['r
                   | Latest Bid:
                 div class="card"
                   div class="card-body"
-                    - if round['user']['latest_bid'].nil?
+                    - if round['user']['won_round_id'] > -1
+                      div class="font-weight-light font-italic text-secondary"
+                        | You already won in round #{round['user']['won_round_id']}.
+                    - elsif round['user']['latest_bid'].nil?
                       div class="font-weight-light font-italic text-secondary"
                         | You did not submit a bid.
                     - else
@@ -74,16 +77,22 @@ div class="container border shadow pt-2 mb-3 #{visibility}" id="round_#{round['r
                         span class="font-weight-normal pl-3"
                           | #{round['user']['latest_bid']['bid_price']}
                       div class="font-weight-light"
+                        | Submit Type:
+                        span class="font-weight-normal pl-3"
+                          | #{round['user']['latest_bid']['submit_type']}
+                      div class="font-weight-light"
                         | Created At:
                         span class="font-weight-normal pl-3"
                           | #{round['user']['latest_bid']['created_at']}
                 - if round['user']['is_allowed_to_bid']
-                  form class="form-inline float-right" id="form-bid"
+                  form class="form-inline float-right" method='post' action='/bids/new' id="form-bid"
                     div class="form-group"
                       label for="#{round['round_id']}" class="sr-only"
                         | New Bid
-                      input type="password" class="form-control" id="inputPassword2" placeholder="#{bidding_upset_price}"
-                      button type="submit" class="btn btn-success"
+                      input type="text" class="form-control" name="bid_price" id="form-bid-bid-price" placeholder="#{bidding_upset_price}"
+                      input type="text" class="form-control d-none" name="group_id" id="form-bid-group-id" value="#{group_id}"
+                      input type="text" class="form-control d-none" name="bidding_upset_price" id="form-bid-bidding_upset_price" value="#{bidding_upset_price}" 
+                      button type="submit" class="btn btn-success" data-toggle="confirmation" data-popout="true"
                         | New Bid
 
 == render :bid_histories, locals: { round: round }

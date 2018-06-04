@@ -27,6 +27,10 @@ module BiauHuei
       routing.on 'groups' do
         routing.route 'groups'
       end
+      
+      routing.on 'bids' do
+        routing.route 'bids'
+      end
     end
   end
 end

@@ -34,6 +34,40 @@ module BiauHuei
             end
           end
         end
+        
+        routing.is 'new' do
+          # Get /groups/new
+          routing.get do
+            if @current_user.logged_in?
+              view :new_group
+            else
+              routing.redirect 'auth/login'
+            end
+          end
+          
+          # Post /groups/new
+          routing.post do
+            unless @current_user.logged_in?
+              routing.redirect '/auth/login'
+            end
+            
+            new_group_data = Form::NewGroup.call(routing.params)
+            
+            if new_group_data.failure?
+              flash[:error] = Form.validation_errors(new_group_data)
+              routing.redirect "/groups/new"
+            end
+            
+            response_body = CreateNewGroup.new(App.config).call(@current_user, new_group_data)
+            puts "/groups/#{response_body['data']['data']['attributes']['id']}"
+            
+            flash[:notice] = 'New group created'
+            routing.redirect "/groups/#{response_body['data']['data']['attributes']['id']}"
+          rescue StandardError
+            flash[:error] = 'Invalid Request'
+            routing.redirect '/'
+          end
+        end
       end
     end
   end
