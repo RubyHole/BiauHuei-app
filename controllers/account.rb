@@ -12,6 +12,7 @@ module BiauHuei
       routing.on do
         # GET /account/[username]
         routing.get String do |username|
+          username = URI.decode(username)
           if @current_user && @current_user.username == username
             view :account, locals: { current_user: @current_user }
           else

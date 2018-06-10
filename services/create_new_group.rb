@@ -3,8 +3,7 @@
 require 'http'
 require 'ruby-duration'
 
-# Create a new group
-class CreateNewGroup
+module BiauHuei
   # Error for illegal round_interval and bidding_duration
   class IllegalRoundIntervalBiddingDuration < StandardError
     def message
@@ -12,59 +11,82 @@ class CreateNewGroup
     end
   end
   
-  def initialize(config)
-    @config = config
-  end
-
-  # Create new group with new_group_data hash:
-  # title,
-  # description,
-  # round_interval_days,
-  # round_interval_hours,
-  # round_interval_minutes,
-  # round_interval_seconds,
-  # bidding_duration_days,
-  # bidding_duration_hours,
-  # bidding_duration_minutes,
-  # bidding_duration_seconds
-  # round_fee,
-  # bidding_upset_price,
-  # members
-  def call(user, new_group_data)
-    response = HTTP.auth("Bearer #{user.auth_token}")
-                   .post("#{@config.API_URL}/groups/new",
-                         json: reformulate(new_group_data))
-    raise StandardError unless response.code == 201
-    response.parse
+  class DuplicateRolesError < StandardError
+    def message
+      'One cannot be both a leader and a member of a group.'
+    end
   end
   
-  def reformulate(new_group_data)
-    round_interval = Duration.new(
-      :days => new_group_data[:round_interval_days],
-      :hours => new_group_data[:round_interval_hours],
-      :minutes => new_group_data[:round_interval_minutes],
-      :seconds => new_group_data[:round_interval_seconds],
-    )
+  class DuplicateMembersError < StandardError
+    def message
+      'Duplicate members.'
+    end
+  end
+
+  # Create a new group
+  class CreateNewGroup
     
-    bidding_duration = Duration.new(
-      :days => new_group_data[:bidding_duration_days],
-      :hours => new_group_data[:bidding_duration_hours],
-      :minutes => new_group_data[:bidding_duration_minutes],
-      :seconds => new_group_data[:bidding_duration_seconds],
-    )
+    def initialize(config)
+      @config = config
+    end
+  
+    # Create new group with new_group_data hash:
+    # title,
+    # description,
+    # round_interval_days,
+    # round_interval_hours,
+    # round_interval_minutes,
+    # round_interval_seconds,
+    # bidding_duration_days,
+    # bidding_duration_hours,
+    # bidding_duration_minutes,
+    # bidding_duration_seconds
+    # round_fee,
+    # bidding_upset_price,
+    # members
+    def call(user, new_group_data)
+      form_validation(user, new_group_data)
+      response = HTTP.auth("Bearer #{user.auth_token}")
+                     .post("#{@config.API_URL}/groups/new",
+                           json: reformulate(new_group_data))
+      raise StandardError unless response.code == 201
+      response.parse
+    end
     
-    raise IllegalRoundIntervalBiddingDuration unless round_interval.total > 0
-    raise IllegalRoundIntervalBiddingDuration unless bidding_duration.total > 0
-    raise IllegalRoundIntervalBiddingDuration unless round_interval.total >= bidding_duration.total
+    def form_validation(user, new_group_data)
+      members = new_group_data[:members]
+      raise DuplicateRolesError if members.include? user.account["username"]
+      raise DuplicateMembersError if members.uniq.length < members.length
+    end
     
-    {
-      title: new_group_data[:title],
-      description: new_group_data[:description],
-      round_interval: round_interval.total,
-      round_fee: new_group_data[:round_fee].to_i,
-      bidding_duration: bidding_duration.total,
-      bidding_upset_price: new_group_data[:bidding_upset_price].to_i,
-      members: new_group_data[:members],
-    }
+    def reformulate(new_group_data)
+      round_interval = Duration.new(
+        :days => new_group_data[:round_interval_days],
+        :hours => new_group_data[:round_interval_hours],
+        :minutes => new_group_data[:round_interval_minutes],
+        :seconds => new_group_data[:round_interval_seconds],
+      )
+      
+      bidding_duration = Duration.new(
+        :days => new_group_data[:bidding_duration_days],
+        :hours => new_group_data[:bidding_duration_hours],
+        :minutes => new_group_data[:bidding_duration_minutes],
+        :seconds => new_group_data[:bidding_duration_seconds],
+      )
+      
+      raise IllegalRoundIntervalBiddingDuration unless round_interval.total > 0
+      raise IllegalRoundIntervalBiddingDuration unless bidding_duration.total > 0
+      raise IllegalRoundIntervalBiddingDuration unless round_interval.total >= bidding_duration.total
+      
+      {
+        title: new_group_data[:title],
+        description: new_group_data[:description],
+        round_interval: round_interval.total,
+        round_fee: new_group_data[:round_fee].to_i,
+        bidding_duration: bidding_duration.total,
+        bidding_upset_price: new_group_data[:bidding_upset_price].to_i,
+        members: new_group_data[:members],
+      }
+    end
   end
 end

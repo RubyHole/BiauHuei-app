@@ -6,11 +6,28 @@ module BiauHuei
   # Web controller for Credence API
   class App < Roda
     route('auth') do |routing|
+      def google_oauth_url(config)
+        url = config.GOOGLE_OAUTH_URL
+        client_id = config.GOOGLE_CLIENT_ID
+        scope = config.GOOGLE_SCOPE
+        redirect_uri = config.GOOGLE_REDIRECT_URI
+        "#{url}?client_id=#{client_id}&scope=#{scope}&response_type=code&redirect_uri=#{redirect_uri}"
+      end
+      
+      def github_oauth_url(config)
+        "/auth/login"
+      end
+      
+      
       @login_route = '/auth/login'
+      
       routing.is 'login' do
         # GET /auth/login
         routing.get do
-          view :login
+          view :login, locals: {
+            google_oauth_url: google_oauth_url(App.config),
+            github_oauth_url: github_oauth_url(App.config)
+          }
         end
 
         # POST /auth/login
@@ -32,6 +49,35 @@ module BiauHuei
         rescue StandardError
           flash[:error] = 'Username or password did not match our records'
           routing.redirect @login_route
+        end
+      end
+      
+      routing.on 'oauth2callback' do
+        routing.is 'google' do
+          # GET /auth/oauth2callback/google
+          routing.get do
+            sso_account = AuthenticateGoogleAccount
+                          .new(App.config)
+                          .call(routing.params['code'])
+            
+            current_user = User.new(sso_account['account'], sso_account['auth_token'])
+            
+            Session.new(SecureSession.new(session)).set_user(current_user)
+            flash[:notice] = "Welcome #{current_user.username}!"
+            routing.redirect '/'
+          rescue StandardError => error
+            puts error.inspect
+            puts error.backtrace
+            flash[:error] = 'Could not sign in using Google'
+            routing.redirect @login_route
+          end
+        end
+      
+        routing.is 'github' do
+          # GET /auth/oauth2callback/github
+          routing.get do
+            routing.redirect '/'
+          end
         end
       end
 

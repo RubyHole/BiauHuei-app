@@ -5,6 +5,8 @@ require 'roda'
 module BiauHuei
   # Web controller for BiauHuei API
   class App < Roda
+    plugin :halt
+    
     route('groups') do |routing|
       routing.is do
         # GET /groups
@@ -30,8 +32,10 @@ module BiauHuei
               view :group,
                    locals: { current_user: @current_user, group: group }
             else
-              routing.redirect 'auth/login'
+              routing.redirect '/auth/login'
             end
+          rescue StandardError
+            routing.halt 404
           end
         end
         
@@ -41,7 +45,7 @@ module BiauHuei
             if @current_user.logged_in?
               view :new_group
             else
-              routing.redirect 'auth/login'
+              routing.redirect '/auth/login'
             end
           end
           
@@ -59,10 +63,18 @@ module BiauHuei
             end
             
             response_body = CreateNewGroup.new(App.config).call(@current_user, new_group_data)
-            puts "/groups/#{response_body['data']['data']['attributes']['id']}"
             
             flash[:notice] = 'New group created'
             routing.redirect "/groups/#{response_body['data']['data']['attributes']['id']}"
+          rescue DuplicateRolesError => error
+            flash[:error] = error.message
+            routing.redirect "/groups/new"
+          rescue DuplicateMembersError => error
+            flash[:error] = error.message
+            routing.redirect "/groups/new"
+          rescue IllegalRoundIntervalBiddingDuration => error
+            flash[:error] = error.message
+            routing.redirect "/groups/new"
           rescue StandardError
             flash[:error] = 'Invalid Request'
             routing.redirect '/'

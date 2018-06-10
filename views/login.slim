@@ -1,5 +1,5 @@
 div class="row"
-  div class="col-sm-4"
+  div class="col-sm-1"
   div class="col-sm-4"
     div class="card mx-auto mt-5"
       div class="card-header"
@@ -16,4 +16,17 @@ div class="row"
           button type='submit' id='button-login' value='login' class="btn btn-primary btn-block"
             i class="fas fa-sign-in-alt"
             | &nbspLogin
-  div class="col-sm-4"
+  div class="col-sm-2 d-flex justify-content-center align-items-center"
+      h1 or
+  div class="col-sm-4  d-flex justify-content-center align-items-center"
+    div
+      div class="card-body"
+        a class="btn btn-danger btn-lg btn-block" href="#{google_oauth_url}" role="button"
+          i class="fab fa-google"
+          == "Sign in with Google"
+      div class="card-body"
+        a class="btn btn-dark btn-lg btn-block" href="#{github_oauth_url}" role="button"
+          i class="fab fa-github"
+          == "Sign in with Github"
+
+  div class="col-sm-1"
