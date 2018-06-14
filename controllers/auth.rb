@@ -15,7 +15,10 @@ module BiauHuei
       end
       
       def github_oauth_url(config)
-        "/auth/login"
+        url = config.GH_OAUTH_URL
+        client_id = config.GH_CLIENT_ID
+        scope = config.GH_SCOPE
+        "#{url}?client_id=#{client_id}&scope=#{scope}"
       end
       
       
@@ -76,7 +79,20 @@ module BiauHuei
         routing.is 'github' do
           # GET /auth/oauth2callback/github
           routing.get do
+            sso_account = AuthenticateGithubAccount
+                          .new(App.config)
+                          .call(routing.params['code'])
+            
+            current_user = User.new(sso_account['account'], sso_account['auth_token'])
+            
+            Session.new(SecureSession.new(session)).set_user(current_user)
+            flash[:notice] = "Welcome #{current_user.username}!"
             routing.redirect '/'
+          rescue StandardError => error
+            puts error.inspect
+            puts error.backtrace
+            flash[:error] = 'Could not sign in using Google'
+            routing.redirect @login_route
           end
         end
       end
