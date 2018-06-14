@@ -91,7 +91,7 @@ module BiauHuei
           rescue StandardError => error
             puts error.inspect
             puts error.backtrace
-            flash[:error] = 'Could not sign in using Google'
+            flash[:error] = 'Could not sign in using Github'
             routing.redirect @login_route
           end
         end
