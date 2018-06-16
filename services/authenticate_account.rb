@@ -12,8 +12,11 @@ module BiauHuei
     end
 
     def call(username:, password:)
-      response = HTTP.post("#{@config.API_URL}/accounts/authenticate",
-                           json: { username: username, password: password })
+      credentials = { username: username, password: password }
+      signed_credentials = SecureMessage.sign(credentials)
+      
+      response = HTTP.post("#{@config.API_URL}/auth/authenticate",
+                           json: signed_credentials)
 
       raise(UnauthorizedError) unless response.code == 200
       response.parse

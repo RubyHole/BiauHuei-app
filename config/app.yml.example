@@ -1,30 +1,26 @@
 ---
 development:
-  API_URL: https://localhost:3000/api/v1
-  APP_URL: https://localhost:9292
-  GOOGLE_CLIENT_ID: <client_id>
-  GOOGLE_CLIENT_SECRET: <client_secret>
-  GOOGLE_OAUTH_URL: https://accounts.google.com/o/oauth2/v2/auth
-  GOOGLE_TOKEN_URL: https://www.googleapis.com/oauth2/v4/token
-  GOOGLE_SCOPE: <scope>
+  API_URL:             https://localhost:3000/api/v1
+  APP_URL:             https://localhost:9292
+  GOOGLE_CLIENT_ID:    <client_id>
+  GOOGLE_OAUTH_URL:    https://accounts.google.com/o/oauth2/v2/auth
+  GOOGLE_TOKEN_URL:    https://www.googleapis.com/oauth2/v4/token
+  GOOGLE_SCOPE:        <scope>
   GOOGLE_REDIRECT_URI: http://localhost:9292/auth/oauth2callback/google
-  GH_OAUTH_URL:   https://github.com/login/oauth/authorize
-  GH_TOKEN_URL:   https://github.com/login/oauth/access_token
-  GH_CLIENT_ID: <client_id>
-  GH_CLIENT_SECRET: <client_secret>
-  GH_SCOPE: <scope>
+  GH_OAUTH_URL:        https://github.com/login/oauth/authorize
+  GH_TOKEN_URL:        https://github.com/login/oauth/access_token
+  GH_CLIENT_ID:        <client_id>
+  GH_SCOPE:            <scope>
 
 test:
-  API_URL: https://localhost:3000/api/v1
-  APP_URL: https://localhost:9292
-  GOOGLE_CLIENT_ID: <client_id>
-  GOOGLE_CLIENT_SECRET: <client_secret>
-  GOOGLE_OAUTH_URL: https://accounts.google.com/o/oauth2/v2/auth
-  GOOGLE_TOKEN_URL: https://www.googleapis.com/oauth2/v4/token
-  GOOGLE_SCOPE: <scope>
+  API_URL:             https://localhost:3000/api/v1
+  APP_URL:             https://localhost:9292
+  GOOGLE_CLIENT_ID:    <client_id>
+  GOOGLE_OAUTH_URL:    https://accounts.google.com/o/oauth2/v2/auth
+  GOOGLE_TOKEN_URL:    https://www.googleapis.com/oauth2/v4/token
+  GOOGLE_SCOPE:        <scope>
   GOOGLE_REDIRECT_URI: http://localhost:9292/auth/oauth2callback/google
-  GH_OAUTH_URL:   https://github.com/login/oauth/authorize
-  GH_TOKEN_URL:   https://github.com/login/oauth/access_token
-  GH_CLIENT_ID: <client_id>
-  GH_CLIENT_SECRET: <client_secret>
-  GH_SCOPE: <scope>
+  GH_OAUTH_URL:        https://github.com/login/oauth/authorize
+  GH_TOKEN_URL:        https://github.com/login/oauth/access_token
+  GH_CLIENT_ID:        <client_id>
+  GH_SCOPE:            <scope>

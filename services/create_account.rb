@@ -17,9 +17,10 @@ class CreateAccount
 
   # Create account with account_data hash: email, username, password
   def call(account_data)
+    signed_account_data = SecureMessage.sign(account_data)
     response = HTTP.post(
       "#{@config.API_URL}/accounts/new",
-      json: account_data
+      json: signed_account_data
     )
 
     raise InvalidAccount unless response.code == 201

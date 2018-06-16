@@ -9,7 +9,7 @@ class AuthenticateGoogleAccount
     def call(code)
       access_token = get_access_token_from_google(code)
       get_sso_account_from_api(access_token)
-      end
+    end
     
     private
     
@@ -26,8 +26,11 @@ class AuthenticateGoogleAccount
     end
     
     def get_sso_account_from_api(access_token)
-      response = HTTP.post("#{@config.API_URL}/accounts/authenticate/google_sso",
-                           json: { access_token: access_token })
+      sso_info = { access_token: access_token }
+      signed_sso_info = SecureMessage.sign(sso_info)
+      
+      response = HTTP.post("#{@config.API_URL}/auth/authenticate/google_sso",
+                           json: signed_sso_info)
       response.code == 200 ? response.parse: nil
     end
 end

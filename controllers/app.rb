@@ -23,14 +23,6 @@ module BiauHuei
       routing.root do
         view 'home', locals: { current_user: @current_user }
       end
-      
-      routing.on 'groups' do
-        routing.route 'groups'
-      end
-      
-      routing.on 'bids' do
-        routing.route 'bids'
-      end
     end
   end
 end
